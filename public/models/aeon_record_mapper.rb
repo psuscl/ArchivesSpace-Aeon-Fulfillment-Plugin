@@ -353,7 +353,7 @@ class AeonRecordMapper
                 return request unless top_container_resolved
 
                 request["instance_top_container_long_display_string_#{instance_count}"] = top_container_resolved['long_display_string']
-                request["instance_top_container_location_#{instance_count}"] = top_container_resolved['ils_holding_id']
+                request["instance_top_container_ils_holding_id_#{instance_count}"] = top_container_resolved['ils_holding_id']
                 request["instance_top_container_last_modified_by_#{instance_count}"] = top_container_resolved['last_modified_by']
                 request["instance_top_container_display_string_#{instance_count}"] = top_container_resolved['display_string']
                 request["instance_top_container_restricted_#{instance_count}"] = top_container_resolved['restricted']
