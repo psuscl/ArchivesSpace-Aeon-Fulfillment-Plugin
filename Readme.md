@@ -4,6 +4,11 @@
 
 **Last Updated:** May 29, 2019
 
+## Downstream Notes
+
+This is Penn State's fork of the Atlas ArchivesSpace Request Fulfillment plugin for Aeon. It is experimental and not recommended for use in other contexts.
+
+The only change we have made is to map the ILS Holding ID to the "instance_top_container_location" OpenURL mapping field, so that we can include specific shelf locations when sending requests to Aeon.
 
 ## Table of Contents
 
@@ -64,7 +69,7 @@ ArchivesSpace may cause changes in the functionality of this plugin.
 
 ## Changelog
 
-- **20170809** 
+- **20170809**
     - Initial release of this ArchivesSpace plugin
     - Added support for sending requests for Archival Objects to Aeon
 - **20171110**
@@ -143,35 +148,35 @@ ArchivesSpace may cause changes in the functionality of this plugin.
     - Added the `:user_defined_fields` setting
 - **20190529**
     - Bug fixes for compatibility with ArchivesSpace v2.6.0 RC1
-        
+
 ## Configuring Plugin Settings
 
-***Please note that the Aeon OpenURLMapping table must be configured in the Customization Manager 
-before the plugin can be used and/or tested with ArchivesSpace. See the [OpenURL Mappings](#openurl-mappings) section 
-for more information.*** 
+***Please note that the Aeon OpenURLMapping table must be configured in the Customization Manager
+before the plugin can be used and/or tested with ArchivesSpace. See the [OpenURL Mappings](#openurl-mappings) section
+for more information.***
 
-***If you are using the Atlas Dual Auth Portal to handle remote authentication in Aeon, please ensure 
-that it is configured to support POST data handling. See the [Aeon Remote Authentication Configurations](#aeon-remote-authentication-configurations) 
+***If you are using the Atlas Dual Auth Portal to handle remote authentication in Aeon, please ensure
+that it is configured to support POST data handling. See the [Aeon Remote Authentication Configurations](#aeon-remote-authentication-configurations)
 section for more information.***
 
-In order to configure this plugin, you will need to modify the 
+In order to configure this plugin, you will need to modify the
 `config/config.rb` file of your ArchivesSpace installation. To enable the plugin,  
-you will need to reference it in the plugin configuration option in this file. 
-Please note that after enabling the plugin in the config.rb file, the ArchivesSpace 
+you will need to reference it in the plugin configuration option in this file.
+Please note that after enabling the plugin in the config.rb file, the ArchivesSpace
 service will need to be restarted to push the plugin to the ArchivesSpace interface.
-In the following example, a reference to the `'aeon-fulfillment'` plugin has 
+In the following example, a reference to the `'aeon-fulfillment'` plugin has
 been added to the list of enabled plugins after the reference to the default `'local'` plugin:
 
 ```ruby
 AppConfig[:plugins] = ['local', 'aeon_fulfillment']
 ```
 
-Next, you will need to add the appropriate settings and values for 
-each repository that will use the plugin. These settings should be placed directly under 
-the line of code listing your enabled plugins shown above. In the sample below, replace 
-`{repo_code}` with the repository code for each repository. The repo_code is 
-also known as the repository's short name. **The repo_code must be written using 
-lower-case.** Please also ensure that the `:aeon_return_link_label` setting 
+Next, you will need to add the appropriate settings and values for
+each repository that will use the plugin. These settings should be placed directly under
+the line of code listing your enabled plugins shown above. In the sample below, replace
+`{repo_code}` with the repository code for each repository. The repo_code is
+also known as the repository's short name. **The repo_code must be written using
+lower-case.** Please also ensure that the `:aeon_return_link_label` setting
 is included directly below the `:aeon_web_url`.
 
 ```ruby
@@ -181,8 +186,8 @@ AppConfig[:aeon_fulfillment]['{repo_code}'][:aeon_web_url] = "{Your aeon web url
 AppConfig[:aeon_fulfillment]['{repo_code}'][:aeon_return_link_label] = "{The text for the return link from Aeon}"
 ```
 
-For example, to configure the plugin for a repository that has the short name 
-"ATLAS", add the following to `config.rb`. **Note: The `:aeon_site_code` setting should be 
+For example, to configure the plugin for a repository that has the short name
+"ATLAS", add the following to `config.rb`. **Note: The `:aeon_site_code` setting should be
 removed if you are not assigning multiple repositories to separate Aeon site codes**
 
 ```ruby
@@ -193,10 +198,10 @@ AppConfig[:aeon_fulfillment]['atlas'][:aeon_return_link_label] = "ArchivesSpace"
 AppConfig[:aeon_fulfillment]['atlas'][:aeon_site_code] = "AEON"
 ```
 
-If preferred, this plugin configuration can also be formatted using the implicit form of a 
-Ruby hash, with settings for each repository grouped within curly braces and 
-separated one per line. A comma should follow each individual line until 
-the end of the block of settings for the repository is reached, and also after 
+If preferred, this plugin configuration can also be formatted using the implicit form of a
+Ruby hash, with settings for each repository grouped within curly braces and
+separated one per line. A comma should follow each individual line until
+the end of the block of settings for the repository is reached, and also after
 the closing curly brace for each repository until the last repository is reached:
 
 ```ruby
@@ -271,14 +276,14 @@ This setting allows the request button to be hidden for any records that have
 any of the listed local access restriction types. The value of this config item
 should be an array of restriction types, for example:
 
-`:hide_button_for_access_restriction_types => ['RestrictedSpecColl']` 
+`:hide_button_for_access_restriction_types => ['RestrictedSpecColl']`
 
 By default, no restriction types are hidden.
 
 #### `:requestable_archival_record_levels`
 
 This setting allows sites to restrict the types of Resources and Archival
-Objects that are requestable, using the "level" property of the record. 
+Objects that are requestable, using the "level" property of the record.
 
 - The setting accepts a few different configurations, specifying either a
   "whitelist" or a "blacklist" of levels that should either have requesting
@@ -465,20 +470,20 @@ AppConfig[:aeon_fulfillment] = {
 
 ## Aeon Remote Authentication Configurations
 
-This plugin is designed to send as much data from ArchivesSpace as possible to 
-allow users to easily map fields on the Aeon side of the integration. As such, it uses POST 
-data rather than GET parameters so that data does not get truncated. This can be problematic 
-for some remote authentication systems. If you are using the Atlas Dual Auth Portal, it 
-already has functionality to resolve this issue by persisting POST data during the remote 
-authentication process so you can simply configure this plugin to send requests to it 
-instead of directly to Aeon. However, please note that some additional configuration 
-is required to enable POST data support for the Dual Auth Portal. If you use the Portal and 
-are experiencing issues with POST data persistence between ArchivesSpace and Aeon, please 
-see the [Using an Authentication Portal Landing Page](https://support.atlas-sys.com/hc/en-us/articles/360011821074#h_01FSYP1NVPGY3JGKTWPM9T3K7Q) 
-page for information on configuring the Portal to support POST data. 
+This plugin is designed to send as much data from ArchivesSpace as possible to
+allow users to easily map fields on the Aeon side of the integration. As such, it uses POST
+data rather than GET parameters so that data does not get truncated. This can be problematic
+for some remote authentication systems. If you are using the Atlas Dual Auth Portal, it
+already has functionality to resolve this issue by persisting POST data during the remote
+authentication process so you can simply configure this plugin to send requests to it
+instead of directly to Aeon. However, please note that some additional configuration
+is required to enable POST data support for the Dual Auth Portal. If you use the Portal and
+are experiencing issues with POST data persistence between ArchivesSpace and Aeon, please
+see the [Using an Authentication Portal Landing Page](https://support.atlas-sys.com/hc/en-us/articles/360011821074#h_01FSYP1NVPGY3JGKTWPM9T3K7Q)
+page for information on configuring the Portal to support POST data.
 
-If you are not using the Atlas Dual Auth Portal with your 
-remote authentication configuration or are having difficulty getting it configured 
+If you are not using the Atlas Dual Auth Portal with your
+remote authentication configuration or are having difficulty getting it configured
 correctly, please contact Atlas Support.
 
 
@@ -515,26 +520,26 @@ records.
 - `language`
 - `restrictions_apply` (true/false value)
 - `display_string`
-- `creators` 
+- `creators`
     - semi-colon (`;`) separated string list
 - `accessrestrict`
     - semi-colon (`;`) separated string list
     - contains the content from `accessrestrict` subnotes
 - `physical_location_note`
-    - semi-colon (`;`) separated string list 
+    - semi-colon (`;`) separated string list
     - contains the content from `physloc` notes
 - `{date_label}_date`
-    - semi-colon (`;`) separated string list 
-    - contains the content from the `expression`s of the record's related 
-      dates 
-    - The plugin will group all of the related dates of each record based on 
-      the date's label. For each distinct date label of the dates that are 
-      linked to the record, the request to Aeon will contain a distinct date 
-      parameter. Some examples of what to expect for the name of this field 
-      include `creation_date`, `event_date`, and `other_date`. The full list 
-      of values that could appear in place of the `{date_label}` placeholder 
-      is controlled by the `date_label` enumeration of your ArchivesSpace 
-      installation. 
+    - semi-colon (`;`) separated string list
+    - contains the content from the `expression`s of the record's related
+      dates
+    - The plugin will group all of the related dates of each record based on
+      the date's label. For each distinct date label of the dates that are
+      linked to the record, the request to Aeon will contain a distinct date
+      parameter. Some examples of what to expect for the name of this field
+      include `creation_date`, `event_date`, and `other_date`. The full list
+      of values that could appear in place of the `{date_label}` placeholder
+      is controlled by the `date_label` enumeration of your ArchivesSpace
+      installation.
 
 The following fields are common to both Accession records and Archival Object
 records, but are based on the number of instances associated with the record.
@@ -584,8 +589,8 @@ additional fields are specific to requests made for Accession records.
 - `use_restrictions_note`
 - `access_restrictions_note`
 - `language`
-    - This field is also present on most Archival Object requests, but it is 
-      mapped from a different location for Accession requests. 
+    - This field is also present on most Archival Object requests, but it is
+      mapped from a different location for Accession requests.
 - `accession_id`
 
 ### Resource Fields
@@ -662,9 +667,9 @@ Below is a list of recommended Open URL mappings that should be set in Aeon.
    `<#replacement-tag>` that has a name that matches one of the field names
    from the [Imported Fields](#imported-fields) section.
 
-The SQL script below can be used to add some basic mappings to the OpenURLMapping table in Aeon. 
-Additional mappings can then be added manually to the table in the Aeon Customization Manager. 
-For more information on configuring this feature Aeon, please visit the 
+The SQL script below can be used to add some basic mappings to the OpenURLMapping table in Aeon.
+Additional mappings can then be added manually to the table in the Aeon Customization Manager.
+For more information on configuring this feature Aeon, please visit the
 [Submitting Requests via OpenURL](https://support.atlas-sys.com/hc/en-us/articles/360011919573-Submitting-Requests-via-OpenURL)
 page of our documentation.
 
@@ -711,7 +716,7 @@ It is possible to control the Aeon request form that fulfillment requests use by
 the OpenURLMapping table for the `DocumentType` parameter. The new OpenURLMapping entry should
 resemble `(Default, ArchivesSpace, Replace, DocumentType, [SomeDocumentType])`. For example, using
 "Manuscript" in place of `[SomeDocumentType]` causes requests to use the `GenericRequestManuscript`
-form. 
+form.
 
 There is some complexity to controlling which form is used:
 
@@ -727,6 +732,6 @@ Aeon, then the Aeon Transaction will use the DefaultRequest form.
 3. If DocumentType is not populated, or if it's populated as "Default", and RequestType is populated
 as "Copy", then the Aeon Transaction will use the PhotoduplicationRequest form.
 
-4. If DocumentType is not "Default", then the name of the form that the Aeon Transaction will use 
+4. If DocumentType is not "Default", then the name of the form that the Aeon Transaction will use
 will be "GenericRequest", concatenated with the value stored in DocumentType parameter on the Aeon
 Transaction.
