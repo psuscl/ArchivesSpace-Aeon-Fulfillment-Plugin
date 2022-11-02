@@ -6,6 +6,8 @@
 
 ## Downstream Notes
 
+(We have made this repository read-only, because we now use [a fork of Harvard's request_list plugin](https://github.com/psuscl/request_list) for Aeon integration.
+
 This is Penn State's fork of the Atlas ArchivesSpace Request Fulfillment plugin for Aeon. It is experimental and not recommended for use in other contexts.
 
 The only change we have made is to map the ILS Holding ID to the "instance_top_container_location" OpenURL mapping field, so that we can include specific shelf locations when sending requests to Aeon.
